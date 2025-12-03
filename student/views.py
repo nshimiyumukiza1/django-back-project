@@ -43,4 +43,23 @@ class SingleUserApi(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
     
 
+class LoginApi(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if not email or not password:
+            return Response({"error": "Email and password required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            student = Student.objects.get(email=email)
+        except Student.DoesNotExist:
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        if not student.check_password(password):
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"message": f"Welcome {student.name}"})
+
+    
+
 
