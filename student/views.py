@@ -15,12 +15,13 @@ class UsersApi(APIView):
         return Response(serializer.data)
     
     def post(self, request):
+        print("Request data:", request.data)
         serializer = StudentSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         
-       
+        print("Serializer errors:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class SingleUserApi(APIView):
@@ -38,7 +39,7 @@ class SingleUserApi(APIView):
         return Response(serializer.errors,status=status.HTTP_404_NOT_FOUND)
     
     def delete(self,request,pk):
-        student = get_object_or_404(Student,pK=pk)
+        student = get_object_or_404(Student,pk=pk)
         student.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     

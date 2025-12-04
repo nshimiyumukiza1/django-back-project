@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password, check_password
 class Student(models.Model):
     name = models.CharField()
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=8)
+    password = models.CharField()
 
     def set_password(self,raw_password):
         self.password = make_password(raw_password)
